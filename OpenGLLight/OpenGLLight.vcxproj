@@ -22,10 +22,10 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="Window.h" />
+    <ClInclude Include="Incl\Camera.h" />
+    <ClInclude Include="Incl\Input.h" />
+    <ClInclude Include="Incl\Shader.h" />
+    <ClInclude Include="Incl\Window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
