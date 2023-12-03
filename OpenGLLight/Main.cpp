@@ -15,6 +15,8 @@ int main()
 {
 	//Инициализация glfw
 	window.initializationGLFW();
+
+	//change
 	//Создание окна
 	window.creatWindow();
 	//Шейдер куба-падение 
