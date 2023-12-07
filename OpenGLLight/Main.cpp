@@ -7,6 +7,9 @@ const char* fragPath = "C:/Users/KK/source/repos/Project/OpenGlProject/OpenGlPro
 const char* vertexLightPath = "C:/Users/KK/source/repos/Project/OpenGlProject/OpenGlProject/Shaders/vShaderLamp.vs";
 const char* fragLightPath = "C:/Users/KK/source/repos/Project/OpenGlProject/OpenGlProject/Shaders/fShaderLamp.frag";
 
+const char* testVerShader = "C:/Users/KK/source/repos/Project/OpenGlProject/OpenGlProject/Shaders/TestShader/TestShader.vs";
+const char* testFragShader = "C:/Users/KK/source/repos/Project/OpenGlProject/OpenGlProject/Shaders/TestShader/TestShaderFrag.frag";
+
 Window window{ 3,3,1000,900,"LightWindow" };
 Input input;
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
@@ -24,7 +27,11 @@ int main()
 	//Шейдер куб-источник
 	Shader lightShader(vertexLightPath, fragLightPath);
 
-	constexpr float vertices[] = {
+	//TestShader
+	Shader testShader(testVerShader, testFragShader);
+
+	constexpr float vertices[] = 
+	{
 		// positions          // normals           // texture coords
 		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
@@ -69,8 +76,39 @@ int main()
 		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 	};
 
+	glm::vec3 cubePositions[] = 
+	{
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(2.0f, 5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f, 3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f, 2.0f, -2.5f),
+		glm::vec3(1.5f, 0.2f, -1.5f),
+		glm::vec3(-1.3f, 1.0f, -1.5f)
+	};
+
+	constexpr float testVertexes[] = 
+	{
+		 0.5f,  0.5f, 0.0f,   
+		 0.5f, -0.5f, 0.0f,   
+		-0.5f, -0.5f, 0.0f,   
+		-0.5f,  0.5f, 0.0f,    
+
+
+	};
+	GLuint indices[] = {  // Note that we start from 0!
+	   0, 1, 3, // First Triangle
+	   1, 2, 3  // Second Triangle
+	};
+	
+
+	GLuint vbo;
+
 	//Куб падения света
-	GLuint vbo, vao;
+	GLuint vao;
 	glGenVertexArrays(1,&vao);
 	glGenBuffers(1,&vbo);
 	glBindVertexArray(vao);
@@ -92,7 +130,22 @@ int main()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,8 * sizeof(GLfloat), nullptr);
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
-	
+
+	//testCube
+	GLuint testVAO,testVBO,testEBO;
+	glGenVertexArrays(1, &testVAO);
+	glGenBuffers(1, &testVBO);
+	glGenBuffers(1, &testEBO);
+	glBindVertexArray(testVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, testVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, testEBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), nullptr);
+	glEnableVertexAttribArray(0);
+	glBindVertexArray(0);
+
+	//textures
 	GLuint texture;
 	int w, h;
 	glGenTextures(1, &texture);
@@ -174,11 +227,12 @@ int main()
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-		glBindVertexArray(vao);
 		glm::mat4 model{1.0f};
+		glBindVertexArray(vao);
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
+		
 
 		//Отрисовка куб-источник
 		lightShader.Use();
@@ -192,17 +246,55 @@ int main()
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-		model = glm::mat4{1.0f};
-		model = glm::translate(model,lightPos);
-		model = glm::scale(model, glm::vec3(0.2f)); 
+		model = glm::mat4{ 1.0f };
+		model = glm::translate(model, lightPos);
+		model = glm::scale(model, glm::vec3(0.2f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		
+
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 
+
+		//renderer of testCube
+		testShader.Use();
+		modelLoc = glGetUniformLocation(testShader.ID, "model");
+		viewLoc = glGetUniformLocation(testShader.ID, "view");
+		projLoc = glGetUniformLocation(testShader.ID, "projection");
+
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+		model = glm::mat4{ 1.0f };
+		model = glm::translate(model, glm::vec3{1.0f});
+		model = glm::scale(model, glm::vec3(5.9f));
+		model = glm::rotate(model, -55.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//glm::mat4 model2{1.0f};
+		//glm::mat4 view2{1.0f};
+		//glm::mat4 projection2{1.0f};
+		////model = glm::translate(model, glm::vec3{2.0f,3.0f,2.0f});
+		//model2 = glm::translate(model2,  glm::vec3(1.0f, 0.0f, 0.0f));
+		//view = glm::translate(view2, glm::vec3(0.0f, 0.0f, -3.0f));
+		//projection = glm::perspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 100.0f);
+		//// Get their uniform location
+		//GLint modelLoc2 = glGetUniformLocation(testShader.ID, "model");
+		//GLint viewLoc2 = glGetUniformLocation(testShader.ID, "view");
+		//GLint projLoc2 = glGetUniformLocation(testShader.ID, "projection");
+		//// Pass them to the shaders
+		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		//// Note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+		//glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection2));
+
+		glBindVertexArray(testVAO);
+		glDrawArrays(GL_TRIANGLES, 0,36);
+		glBindVertexArray(0);
+
+
+
 		//Отображение линий 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		//Отрисовка на текущей итерации и вывод на экран
 		glfwSwapBuffers(window.ret());
