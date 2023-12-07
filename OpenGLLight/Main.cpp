@@ -92,10 +92,11 @@ int main()
 
 	constexpr float testVertexes[] = 
 	{
-		 0.5f,  0.5f, 0.0f,   
-		 0.5f, -0.5f, 0.0f,   
-		-0.5f, -0.5f, 0.0f,   
-		-0.5f,  0.5f, 0.0f,    
+		// Positions          // Texture Coords
+	   0.5f,  0.5f, 0.0f,   1.0f, 1.0f, // Top Right
+	   0.5f, -0.5f, 0.0f,   1.0f, 0.0f, // Bottom Right
+	  -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, // Bottom Left
+	  -0.5f,  0.5f, 0.0f,   0.0f, 1.0f  // Top Left     
 
 
 	};
@@ -142,7 +143,9 @@ int main()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, testEBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), nullptr);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(2);
 	glBindVertexArray(0);
 
 	//textures
@@ -155,6 +158,17 @@ int main()
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+
+	GLuint texture2;
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+	unsigned char* image2 = SOIL_load_image("C:/Users/KK/Desktop/project/sky.jpg", &w, &h, nullptr, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, image2);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	SOIL_free_image_data(image2);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
 
 	//Игровой цикл
 	while (!glfwWindowShouldClose(window.ret()))
@@ -195,8 +209,8 @@ int main()
 		cubeShader.Use();
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture);
-		cubeShader.setInt("material.diffuse", 0);
 		glActiveTexture(GL_TEXTURE1);
+		cubeShader.setInt("material.diffuse", 0);
 		cubeShader.setVec3("light.position", lightPos);
 		cubeShader.setVec3("viewPos", camera.Position);
 		GLint objectColorLoc = glGetUniformLocation(cubeShader.ID, "objectColor");
@@ -258,6 +272,10 @@ int main()
 
 		//renderer of testCube
 		testShader.Use();
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture2);
+		glActiveTexture(GL_TEXTURE1);
+
 		modelLoc = glGetUniformLocation(testShader.ID, "model");
 		viewLoc = glGetUniformLocation(testShader.ID, "view");
 		projLoc = glGetUniformLocation(testShader.ID, "projection");
@@ -267,25 +285,9 @@ int main()
 
 		model = glm::mat4{ 1.0f };
 		model = glm::translate(model, glm::vec3{1.0f});
-		model = glm::scale(model, glm::vec3(5.9f));
+		model = glm::scale(model, glm::vec3(100.9f));
 		model = glm::rotate(model, -55.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		//glm::mat4 model2{1.0f};
-		//glm::mat4 view2{1.0f};
-		//glm::mat4 projection2{1.0f};
-		////model = glm::translate(model, glm::vec3{2.0f,3.0f,2.0f});
-		//model2 = glm::translate(model2,  glm::vec3(1.0f, 0.0f, 0.0f));
-		//view = glm::translate(view2, glm::vec3(0.0f, 0.0f, -3.0f));
-		//projection = glm::perspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 100.0f);
-		//// Get their uniform location
-		//GLint modelLoc2 = glGetUniformLocation(testShader.ID, "model");
-		//GLint viewLoc2 = glGetUniformLocation(testShader.ID, "view");
-		//GLint projLoc2 = glGetUniformLocation(testShader.ID, "projection");
-		//// Pass them to the shaders
-		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		//// Note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-		//glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection2));
 
 		glBindVertexArray(testVAO);
 		glDrawArrays(GL_TRIANGLES, 0,36);
