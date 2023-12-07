@@ -84,5 +84,5 @@ public:
 		
 	}
 	
-	GLFWwindow* ret() { return window; }
+	GLFWwindow* ret() { return this; }
 };
