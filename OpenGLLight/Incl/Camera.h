@@ -40,10 +40,20 @@ class Camera
         GLfloat         fov;
 
     // Constructor with vectors
-    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), GLfloat yaw = YAW, GLfloat pitch = PITCH);
+    Camera (glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), 
+            glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), 
+            GLfloat yaw = YAW, 
+            GLfloat pitch = PITCH);
 
     // Конструктор со скалярными значениями
-    Camera(GLfloat posX, GLfloat posY, GLfloat posZ, GLfloat upX, GLfloat upY, GLfloat upZ, GLfloat yaw, GLfloat pitch);
+    Camera (GLfloat posX, 
+            GLfloat posY, 
+            GLfloat posZ, 
+            GLfloat upX, 
+            GLfloat upY, 
+            GLfloat upZ, 
+            GLfloat yaw, 
+            GLfloat pitch);
 
     // Возвращает матрицу вида, вычисленную с использованием углов Eular и матрицы LookAt
     glm::mat4 GetViewMatrix();
