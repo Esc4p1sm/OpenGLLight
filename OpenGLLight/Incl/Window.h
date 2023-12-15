@@ -1,30 +1,30 @@
-#pragma once
-#define GLEW_STATIC
+п»ї#pragma once
 
-#include <glew.h>
 #include <glfw3.h>
-//Значения окна по умолчанию
-int width, height;
 
 class Window {
 
-private:
+	private:
 
-	GLFWwindow* window;
-	int majorVersion, minorVersion;
-	const char* nameOfWindow;
+		GLFWwindow*		_window;
+		int				_majorVersion, _minorVersion;
+		const char*		_nameOfWindow;
 
-public:
+	public:
 
+		int width, height;
 
-	Window(int majorVersion = 3, int minorVersion = 3, int w = 800, int h = 600, const char* nameOfWindow = "Window");
+		//РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РѕРєРЅР°
+		Window (int majorVersion = 3, int minorVersion = 3, int w = 800, int h = 600, const char* nameOfWindow = "Window");
 
-	//Инициализация	
-	void initializationGLFW();
-	//Создание окна
-	int creatWindow();
+		//РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ	
+		void InitializationGLFW();
 
-	GLFWwindow* ret();
+		//РЎРѕР·РґР°РЅРёРµ РѕРєРЅР°
+		int CreatWindow();
 
-	~Window();
+		//РџРѕР»СѓС‡РµРЅРёРµ РѕР±СЉРµРєС‚Р° РѕРєРЅР°	
+		GLFWwindow* ReturnWindow();
+
+		~Window();
 };
