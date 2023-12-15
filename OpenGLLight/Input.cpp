@@ -1,29 +1,18 @@
 #pragma once
-#include  "Camera.h"
-#include  <iostream>
 
-//Создание объекта камеры
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-// Время, прошедшее между последним и текущим кадром
-GLfloat deltaTime = 0.0f;
-// Время вывода последнего кадра
-GLfloat lastFrame = 0.0f;
-//Массив для ключей нажатия клавиш
-bool keys[1024];
-bool firstMouse = true;
-GLfloat lastX;
-GLfloat lastY;
+#include "Input.h"
+//#include "Camera.h"
 
-class Input
-{
-public:
 
-	Input(int width, int height)
+
+Input::Input(Camera myCamera, int width, int height)
 	{
+		camera = myCamera;
 		lastX = width / 2.0;
 		lastY = height / 2.0;
 	}
-	void DoMovement()
+
+	void Input::DoMovement()
 	{
 		// Контроль камеры
 		if (keys[GLFW_KEY_W])
@@ -36,8 +25,8 @@ public:
 			camera.ProcessKeyboard(RIGHT, deltaTime);
 	}
 
-	static void MouseCallback(GLFWwindow* window, double xpos, double ypos)
-	{
+	 void Input::MouseCallback(GLFWwindow* window, double xpos, double ypos)
+	 {
 
 		//Возвращение курсора в начальную позицию, чтобы не было резкого движения
 		if (firstMouse)
@@ -53,15 +42,15 @@ public:
 		lastY = ypos;
 
 		camera.ProcessMouseMovement(xoffset, yoffset);
-	}
+	 }
 
-	static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+	 void Input::ScrollCallback(GLFWwindow* window,double xoffset, double yoffset)
 	{
 		camera.ProcessMouseScroll(yoffset);
 
 	}
 
-	static void KeyCallBack(GLFWwindow* window, int key, int scancode, int action, int mode)
+	 void Input::KeyCallBack(GLFWwindow* window, int key, int scancode, int action, int mode)
 	{
 		if (action == GLFW_PRESS)
 			keys[key] = true;
@@ -77,4 +66,3 @@ public:
 	}
 
 
-};
