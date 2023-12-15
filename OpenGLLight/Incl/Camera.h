@@ -60,7 +60,7 @@ class Camera
 
     // Обрабатывает ввод, полученный с любой системы ввода, подобной клавиатуре. 
     // Принимает входной параметр в виде перечисления, определенного камерой (чтобы абстрагировать его от оконных систем)
-    void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime);
+    void ProcessKeyboard (Camera_Movement direction, GLfloat deltaTime);
 
     // Обрабатывает ввод, полученный от системы ввода с помощью мыши. Ожидает значение смещения как в направлении x, так и в направлении y.
     void ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch = true);
