@@ -5,15 +5,15 @@
 #include <SOIL.h>
 #include "Renderer.h"
 
-const char* vertexPath = "D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/vShaderFall.vs";
-const char* fragPath = "D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/fShaderFall.frag";
-const char* vertexLightPath = "D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/vShaderLamp.vs";
-const char* fragLightPath = "D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/fShaderLamp.frag";
+const char* vertexPath =		"D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/vShaderFall.vs";
+const char* fragPath =			"D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/fShaderFall.frag";
+const char* vertexLightPath =	"D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/vShaderLamp.vs";
+const char* fragLightPath =		"D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/fShaderLamp.frag";
 
-const char* testVerShader = "D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/TestShader/TestShader.vs";
-const char* testFragShader = "D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/TestShader/TestShaderFrag.frag";
+const char* testVerShader =		"D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/TestShader/TestShader.vs";
+const char* testFragShader =	"D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/TestShader/TestShaderFrag.frag";
 
-Window *window=new Window{ 3,3,1000,900,"LightWindow" };
+Window *window=new Window { 3,3,1000,900,"LightWindow" };
 
 Input input{ 800,600,glm::vec3{1.0f,1.0f,1.0f} };
 
