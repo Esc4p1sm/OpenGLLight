@@ -3,10 +3,8 @@
 #include "Window.h"
 #include "Input.h"
 #include <SOIL.h>
-//#define GLM_FORCE_SWIZZLE
-//#include "glm/ext.hpp"
-//#include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtc/type_ptr.hpp>
+#include "Renderer.h"
+
 const char* vertexPath = "D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/vShaderFall.vs";
 const char* fragPath = "D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/fShaderFall.frag";
 const char* vertexLightPath = "D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/vShaderLamp.vs";
@@ -16,7 +14,9 @@ const char* testVerShader = "D:/Program Files/repos/Project/OpenGlProject/OpenGl
 const char* testFragShader = "D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/TestShader/TestShaderFrag.frag";
 
 Window *window=new Window{ 3,3,1000,900,"LightWindow" };
+
 Input input{ 800,600,glm::vec3{1.0f,1.0f,1.0f} };
+
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 int main()
@@ -110,48 +110,29 @@ int main()
 	   1, 2, 3  // Second Triangle
 	};
 
-
 	GLuint vbo;
 
 	//Куб падения света
 	GLuint vao;
-	glGenVertexArrays(1, &vao);
-	glGenBuffers(1, &vbo);
-	glBindVertexArray(vao);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), nullptr);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
-
-
+	Renderer* fall = new Renderer{};
+	fall->GenerateBuffers(vertices,&vbo, &vao);
+	fall->AddAtribb(0,3,GL_FLOAT,0,(8*sizeof(float)),nullptr);
+	fall->AddAtribb(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	fall->AddAtribb(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	
 	//Куб в качестве источника света
 	GLuint lightVAO;
-	glGenVertexArrays(1, &lightVAO);
-	glBindVertexArray(lightVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), nullptr);
-	glEnableVertexAttribArray(0);
-	glBindVertexArray(0);
-
+	Renderer* light = new Renderer{};
+	light->GenerateBuffers(&vbo,&lightVAO);
+	light->AddAtribb(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), nullptr);
+	
 	//testCube
-	GLuint testVAO, testVBO, testEBO;
-	glGenVertexArrays(1, &testVAO);
-	glGenBuffers(1, &testVBO);
-	glGenBuffers(1, &testEBO);
-	glBindVertexArray(testVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, testVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, testEBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), nullptr);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(2);
-	glBindVertexArray(0);
+	GLuint  testVao{};
+	Renderer*testCube=new Renderer{};
+	testCube->GenerateBuffers(vertices,&vbo,&testVao);
+	testCube->AddAtribb(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), nullptr);
+	testCube->AddAtribb(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	Renderer::AtribbUnbind();
 
 	//textures
 	GLuint texture;
@@ -174,7 +155,7 @@ int main()
 	SOIL_free_image_data(image2);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-
+	
 	//Игровой цикл
 	while (!glfwWindowShouldClose(window->ReturnWindow()))
 	{
@@ -199,7 +180,6 @@ int main()
 		//Закрыть окно
 		glfwSetKeyCallback(window->ReturnWindow(), Input::KeyCallBack);
 		glfwSetScrollCallback(window->ReturnWindow(), Input::ScrollCallback);
-
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
@@ -227,7 +207,6 @@ int main()
 		glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
 		glUniform3f(lightPosition, lightPos.x, lightPos.y, lightPos.z);
 
-
 		cubeShader.setVec3("material.ambient", 0.5f, 0.2f, 0.31f);
 		cubeShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
 		cubeShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
@@ -247,16 +226,12 @@ int main()
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
 		glm::mat4 model{ 1.0f };
-		glBindVertexArray(vao);
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
-
+		
+		fall->Render(vao);
 
 		//Отрисовка куб-источник
 		lightShader.Use();
-
-
 
 		modelLoc = glGetUniformLocation(lightShader.ID, "model");
 		viewLoc = glGetUniformLocation(lightShader.ID, "view");
@@ -270,10 +245,7 @@ int main()
 		model = glm::scale(model, glm::vec3(0.2f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
-		glBindVertexArray(lightVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
-
+		light->Render(lightVAO);
 
 		//renderer of testCube
 		testShader.Use();
@@ -294,12 +266,8 @@ int main()
 		model = glm::rotate(model, -55.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
-		glBindVertexArray(testVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
-
-
-
+		testCube->Render(testVao);
+		
 		//Отображение линий 
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -307,9 +275,11 @@ int main()
 		glfwSwapBuffers(window->ReturnWindow());
 	}
 	//Очистка буферов
-	glDeleteVertexArrays(1, &vao);
-	glDeleteBuffers(1, &vbo);
-
+	Renderer::DeleteVao(1, &vao);
+	Renderer::DeleteVbo(1, &vbo);
+	Renderer::DeleteVao(1, &testVao);
+	Renderer::DeleteVao(1, &lightVAO);
+	
 	//Удаление окна
 	glfwTerminate();
 	return 0;
