@@ -22,10 +22,10 @@ class Renderer
 		 glEnableVertexAttribArray(layout);
 	 }
 
-	 void Render(GLuint vao)
+	 void Render(GLuint vao,int elements)
 	 {
 		 glBindVertexArray(vao);
-		 glDrawArrays(GL_TRIANGLES, 0, 36);
+		 glDrawArrays(GL_TRIANGLES, 0, elements);
 		 glBindVertexArray(0);
 	 }
 

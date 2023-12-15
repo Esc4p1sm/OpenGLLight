@@ -228,7 +228,7 @@ int main()
 		glm::mat4 model{ 1.0f };
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		
-		fall->Render(vao);
+		fall->Render(vao,36);
 
 		//Отрисовка куб-источник
 		lightShader.Use();
@@ -245,7 +245,7 @@ int main()
 		model = glm::scale(model, glm::vec3(0.2f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
-		light->Render(lightVAO);
+		light->Render(lightVAO,36);
 
 		//renderer of testCube
 		testShader.Use();
@@ -266,7 +266,7 @@ int main()
 		model = glm::rotate(model, -55.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
-		testCube->Render(testVao);
+		testCube->Render(testVao,36);
 		
 		//Отображение линий 
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
