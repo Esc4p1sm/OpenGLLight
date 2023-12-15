@@ -40,17 +40,27 @@ class Camera
         GLfloat         fov;
 
     // Constructor with vectors
-    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), GLfloat yaw = YAW, GLfloat pitch = PITCH);
+    Camera (glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), 
+            glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), 
+            GLfloat yaw = YAW, 
+            GLfloat pitch = PITCH);
 
     // Конструктор со скалярными значениями
-    Camera(GLfloat posX, GLfloat posY, GLfloat posZ, GLfloat upX, GLfloat upY, GLfloat upZ, GLfloat yaw, GLfloat pitch);
+    Camera (GLfloat posX, 
+            GLfloat posY, 
+            GLfloat posZ, 
+            GLfloat upX, 
+            GLfloat upY, 
+            GLfloat upZ, 
+            GLfloat yaw, 
+            GLfloat pitch);
 
     // Возвращает матрицу вида, вычисленную с использованием углов Eular и матрицы LookAt
     glm::mat4 GetViewMatrix();
 
     // Обрабатывает ввод, полученный с любой системы ввода, подобной клавиатуре. 
     // Принимает входной параметр в виде перечисления, определенного камерой (чтобы абстрагировать его от оконных систем)
-    void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime);
+    void ProcessKeyboard (Camera_Movement direction, GLfloat deltaTime);
 
     // Обрабатывает ввод, полученный от системы ввода с помощью мыши. Ожидает значение смещения как в направлении x, так и в направлении y.
     void ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch = true);
