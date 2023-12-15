@@ -19,7 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Incl\Camera.h" />
@@ -81,7 +84,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Libs\OpenGL\Headder;$(IncludePath)</IncludePath>
-    <ExternalIncludePath>C:\Libs\OpenGL\Headder;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>D:\Program Files\repos\Project\OpenGLLight\OpenGLLight\Incl;C:\Libs\OpenGL\Headder;$(ExternalIncludePath)</ExternalIncludePath>
     <LibraryPath>C:\Libs\OpenGL\Libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
