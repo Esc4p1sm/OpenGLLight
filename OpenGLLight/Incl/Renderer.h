@@ -11,12 +11,12 @@ class Renderer
 
 	 void GenerateBuffers (GLuint* vbo, GLuint* vao);
 	
-	 void AddAtribb (int layout,
-					 int argumentSize,
-					 int argumentType ,
-					 int normalizeData,
-					 int dataStep,
-					 GLvoid* beginningData)
+	 void AddAtribb(int layout,
+					int argumentSize,
+					int argumentType ,
+					int normalizeData,
+					int dataStep,
+					GLvoid* beginningData)
 	 {
 		 glVertexAttribPointer(layout, argumentSize, argumentType, normalizeData, dataStep, beginningData);
 		 glEnableVertexAttribArray(layout);
