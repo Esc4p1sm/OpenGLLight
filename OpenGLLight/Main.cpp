@@ -2,7 +2,11 @@
 #include "Shader.h"
 #include "Window.h"
 #include "Input.h"
-
+#include <SOIL.h>
+//#define GLM_FORCE_SWIZZLE
+//#include "glm/ext.hpp"
+//#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtc/type_ptr.hpp>
 const char* vertexPath = "D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/vShaderFall.vs";
 const char* fragPath = "D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/fShaderFall.frag";
 const char* vertexLightPath = "D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/vShaderLamp.vs";
@@ -11,18 +15,18 @@ const char* fragLightPath = "D:/Program Files/repos/Project/OpenGlProject/OpenGl
 const char* testVerShader = "D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/TestShader/TestShader.vs";
 const char* testFragShader = "D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/TestShader/TestShaderFrag.frag";
 
-Window window{ 3,3,1000,900,"LightWindow" };
-Input input{ 800,600 };
+Window *window=new Window{ 3,3,1000,900,"LightWindow" };
+Input input{ 800,600,glm::vec3{1.0f,1.0f,1.0f} };
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 int main()
 {
 	//Инициализация glfw
-	window.initializationGLFW();
+	window->InitializationGLFW();
 
 	//change
 	//Создание окна
-	window.creatWindow();
+	window->CreatWindow();
 	//Шейдер куба-падение 
 	Shader cubeShader(vertexPath, fragPath);
 	//Шейдер куб-источник
@@ -172,7 +176,7 @@ int main()
 
 
 	//Игровой цикл
-	while (!glfwWindowShouldClose(window.ret()))
+	while (!glfwWindowShouldClose(window->ReturnWindow()))
 	{
 		GLfloat	currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
@@ -184,17 +188,17 @@ int main()
 
 		//Управление камерой
 		input.DoMovement();
-		glfwSetCursorPosCallback(window.ret(), Input::MouseCallback);
+		glfwSetCursorPosCallback(window->ReturnWindow(), Input::MouseCallback);
 
 		//Проверка глубины
 		glEnable(GL_DEPTH_TEST);
 
 		//Захват курсора
-		glfwSetInputMode(window.ret(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetInputMode(window->ReturnWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 		//Закрыть окно
-		glfwSetKeyCallback(window.ret(), Input::KeyCallBack);
-		glfwSetScrollCallback(window.ret(), Input::ScrollCallback);
+		glfwSetKeyCallback(window->ReturnWindow(), Input::KeyCallBack);
+		glfwSetScrollCallback(window->ReturnWindow(), Input::ScrollCallback);
 
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -235,7 +239,7 @@ int main()
 
 		glm::mat4 view{ 1.0f };
 		view = camera.GetViewMatrix();
-		glm::mat4 projection = glm::perspective(camera.fov, (GLfloat)width / (GLfloat)height, 0.1f, 100.0f);
+		glm::mat4 projection = glm::perspective(camera.fov, (GLfloat)window->width / (GLfloat)window->height, 0.1f, 100.0f);
 		GLint modelLoc = glGetUniformLocation(cubeShader.ID, "model");
 		GLint viewLoc = glGetUniformLocation(cubeShader.ID, "view");
 		GLint projLoc = glGetUniformLocation(cubeShader.ID, "projection");
@@ -300,7 +304,7 @@ int main()
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		//Отрисовка на текущей итерации и вывод на экран
-		glfwSwapBuffers(window.ret());
+		glfwSwapBuffers(window->ReturnWindow());
 	}
 	//Очистка буферов
 	glDeleteVertexArrays(1, &vao);

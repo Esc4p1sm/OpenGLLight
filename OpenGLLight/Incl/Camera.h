@@ -2,7 +2,8 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-enum Camera_Movement {
+enum Camera_Movement 
+{
     FORWARD,
     BACKWARD,
     LEFT,
@@ -10,33 +11,37 @@ enum Camera_Movement {
 };
 
 // Default camera values
-const GLfloat YAW = -90.0f;
-const GLfloat PITCH = 0.0f;
-const GLfloat SPEED = 3.0f;
-const GLfloat SENSITIVTY = 0.25f;
-const GLfloat ZOOM = 45.0f;
+const GLfloat YAW =        -90.0f;
+const GLfloat PITCH =       0.0f;
+const GLfloat SPEED =       3.0f;
+const GLfloat SENSITIVTY =  0.25f;
+const GLfloat ZOOM =        45.0f;
 
 
 // An abstract camera class that processes input and calculates the corresponding Eular Angles, Vectors and Matrices for use in OpenGL
 class Camera
 {
-public:
-    // Camera Attributes
-    glm::vec3 position;
-    glm::vec3 front;
-    glm::vec3 up;
-    glm::vec3 right;
-    glm::vec3 worldUp;
-    // Eular Angles
-    GLfloat yaw;
-    GLfloat pitch;
-    // Camera options
-    GLfloat movementSpeed;
-    GLfloat mouseSensitivity;
-    GLfloat fov;
+    public:
+
+        // Camera Attributes
+        glm::vec3       position;
+        glm::vec3       front;
+        glm::vec3       up;
+        glm::vec3       right;
+        glm::vec3       worldUp;
+
+        // Eular Angles
+        GLfloat         yaw;
+        GLfloat         pitch;
+
+        // Camera options
+        GLfloat         movementSpeed;
+        GLfloat         mouseSensitivity;
+        GLfloat         fov;
 
     // Constructor with vectors
     Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), GLfloat yaw = YAW, GLfloat pitch = PITCH);
+
     // Конструктор со скалярными значениями
     Camera(GLfloat posX, GLfloat posY, GLfloat posZ, GLfloat upX, GLfloat upY, GLfloat upZ, GLfloat yaw, GLfloat pitch);
 
@@ -56,5 +61,5 @@ public:
 private:
 
     // Вычисляет передний вектор по (обновленным) углам обзора камеры
-    void UpdateCameraVectors();
+    void _UpdateCameraVectors();
 };
