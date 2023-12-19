@@ -1,6 +1,8 @@
 #include "Renderer.h"
 
-void Renderer::GenerateBuffers (const float(&vertices)[288],GLuint *vbo,GLuint* vao)
+Renderer::Renderer() = default;
+
+void Renderer::GenerateBuffers (const float (&vertices)[288],GLuint *vbo,GLuint* vao)
 {
 	glGenVertexArrays(1, &*vao);
 	glGenBuffers(1, *&vbo);
@@ -16,4 +18,5 @@ void Renderer::GenerateBuffers (GLuint* vbo,  GLuint* vao)
 	glBindBuffer(GL_ARRAY_BUFFER, *vbo);
 }
 
-Renderer::~Renderer () {}
+Renderer::~Renderer() {}
+

@@ -47,7 +47,7 @@ glm::mat4 Camera::GetViewMatrix()
     return glm::lookAt(position, position + front, up);
 }
 
-// Обрабатывает ввод, полученный с любой системы ввода, подобной клавиатуре. 
+// Обрабатывает ввод
 // Принимает входной параметр в виде перечисления, определенного камерой (чтобы абстрагировать его от оконных систем)
 void Camera::ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
 {
@@ -71,15 +71,13 @@ void Camera::ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean co
     yaw += xoffset;
     pitch += yoffset;
 
-    // Убедитесь, что при превышении высоты тона экран не переворачивается
     if (constrainPitch)
     {
         if (pitch > 89.0f)  { pitch = 89.0f; }
 
         if (pitch < -89.0f) { pitch = -89.0f; }
     }
-
-    // Обновите передний, правый и верхний векторы, используя обновленные угловые значения        
+      
     _UpdateCameraVectors();
 }
 
@@ -104,7 +102,7 @@ void Camera::_UpdateCameraVectors()
     this->front = glm::normalize(front);
 
     // Также повторно вычислите правый и восходящий векторы        
-    this->right = glm::normalize(glm::cross(this->front, this->worldUp));  // Нормализуйте векторы, потому что их длина становится ближе к 0, чем больше вы смотрите вверх или вниз, что приводит к замедлению движения.
+    this->right = glm::normalize(glm::cross(this->front, this->worldUp)); 
     this->up = glm::normalize(glm::cross(this->right, this->front));
 }
 

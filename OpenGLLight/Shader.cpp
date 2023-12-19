@@ -8,6 +8,7 @@ Shader::Shader (const GLchar* vertexPath, const GLchar* fragmentPath)
     vShaderFile.exceptions(std::ifstream::badbit);
 
     fShaderFile.exceptions(std::ifstream::badbit);
+
     try
     {
         vShaderFile.open(vertexPath);
@@ -39,7 +40,7 @@ Shader::Shader (const GLchar* vertexPath, const GLchar* fragmentPath)
     glShaderSource(vertex, 1, &vShaderCode, NULL);
     glCompileShader(vertex);
 
-    // Если есть ошибки - вывести их
+    // Вывод ошибок
     glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
     if (!success)
     {

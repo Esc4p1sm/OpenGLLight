@@ -21,10 +21,10 @@ class Window {
 		void InitializationGLFW();
 
 		//Создание окна
-		int CreatWindow();
+		int CreatWindow() noexcept;
 
 		//Получение объекта окна	
-		GLFWwindow* ReturnWindow();
+		GLFWwindow* GetWindow();
 
 		~Window();
 };
