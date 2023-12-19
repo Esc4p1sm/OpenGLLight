@@ -5,21 +5,21 @@
 glm::vec3 vectorfOfCamera;
 
 //Создание объекта камеры (значение по умолчанию)
-Camera camera { vectorfOfCamera };
+ Camera camera { vectorfOfCamera };
 
-// Время, прошедшее между последним и текущим кадром
-GLfloat deltaTime = 0.0f;
+//Время, прошедшее между последним и текущим кадром
+ GLfloat deltaTime = 0.0f;
 
-// Время вывода последнего кадра
-GLfloat lastFrame = 0.0f;
+//Время вывода последнего кадра
+ GLfloat lastFrame = 0.0f;
 
 //Массив для ключей нажатия клавиш
-bool keys[1024];
+ bool keys[1024];
 
-bool firstMouse = true;
+ bool firstMouse = true;
 
-GLfloat lastX;
-GLfloat lastY;
+ GLfloat lastX;
+ GLfloat lastY;
 
 class Input
 {
@@ -73,8 +73,8 @@ public:
 
 		else if (action == GLFW_RELEASE) { keys[key] = false; }
 
-		// когда пользователь нажимает esc, мы устанавливаем свойство windowshouldclose в true, 
-		// и приложение после этого закроется
+		 
+		//Закрытие окна
 		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		{
 			glfwSetWindowShouldClose(window, GL_TRUE);

@@ -7,6 +7,8 @@ class Renderer
 {
   public:
 		 
+	Renderer();
+
 	void GenerateBuffers (const float(&vertices)[288],GLuint *vbo,GLuint* vao);
 
 	void GenerateBuffers (GLuint* vbo, GLuint* vao);

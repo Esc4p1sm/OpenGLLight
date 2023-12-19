@@ -20,7 +20,7 @@ class Shader {
     //Идентификатор программы
     unsigned int ID;
 
-    // 1. Получаем исходный код шейдера из filePath
+    //Получаем исходный код шейдера из filePath
     string      vertexCode;
     string      fragmentCode;
     ifstream    vShaderFile;

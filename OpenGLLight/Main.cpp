@@ -2,8 +2,8 @@
 #include "Shader.h"
 #include "Window.h"
 #include "Input.h"
-#include <SOIL.h>
 #include "Renderer.h"
+#include <SOIL.h>
 
 const char* vertexPath =		"D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/vShaderFall.vs";
 const char* fragPath =			"D:/Program Files/repos/Project/OpenGlProject/OpenGlProject/Shaders/fShaderFall.frag";
@@ -24,7 +24,6 @@ int main()
 	//Инициализация glfw
 	window->InitializationGLFW();
 
-	//change
 	//Создание окна
 	window->CreatWindow();
 	//Шейдер куба-падение 
@@ -81,7 +80,7 @@ int main()
 		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 	};
 
-	glm::vec3 cubePositions[] =
+	constexpr glm::vec3 cubePositions[] =
 	{
 		glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3(2.0f, 5.0f, -15.0f),
@@ -105,7 +104,7 @@ int main()
 
 
 	};
-	GLuint indices[] = {  // Note that we start from 0!
+	constexpr GLuint indices[] = {  // Note that we start from 0!
 	   0, 1, 3, // First Triangle
 	   1, 2, 3  // Second Triangle
 	};
@@ -115,7 +114,7 @@ int main()
 	//Куб падения света
 	GLuint vao;
 	Renderer* fall = new Renderer{};
-	fall->GenerateBuffers(vertices,&vbo, &vao);
+	fall->GenerateBuffers(vertices, &vbo, &vao);
 	fall->AddAtribb(0,3,GL_FLOAT,0,(8*sizeof(float)),nullptr);
 	fall->AddAtribb(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 	fall->AddAtribb(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
@@ -154,10 +153,11 @@ int main()
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(image2);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
+	
+	
 	
 	//Игровой цикл
-	while (!glfwWindowShouldClose(window->ReturnWindow()))
+	while (!glfwWindowShouldClose(window->GetWindow()))
 	{
 		GLfloat	currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
@@ -169,17 +169,17 @@ int main()
 
 		//Управление камерой
 		input.DoMovement();
-		glfwSetCursorPosCallback(window->ReturnWindow(), Input::MouseCallback);
+		glfwSetCursorPosCallback(window->GetWindow(), Input::MouseCallback);
 
 		//Проверка глубины
 		glEnable(GL_DEPTH_TEST);
 
 		//Захват курсора
-		glfwSetInputMode(window->ReturnWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetInputMode(window->GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 		//Закрыть окно
-		glfwSetKeyCallback(window->ReturnWindow(), Input::KeyCallBack);
-		glfwSetScrollCallback(window->ReturnWindow(), Input::ScrollCallback);
+		glfwSetKeyCallback(window->GetWindow(), Input::KeyCallBack);
+		glfwSetScrollCallback(window->GetWindow(), Input::ScrollCallback);
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
@@ -213,7 +213,7 @@ int main()
 		cubeShader.setFloat("material.shininess", 32.0f);
 
 		cubeShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-		cubeShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f); // darken the light a bit to fit the scene
+		cubeShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f); 
 		cubeShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
 		glm::mat4 view{ 1.0f };
@@ -262,8 +262,8 @@ int main()
 
 		model = glm::mat4{ 1.0f };
 		model = glm::translate(model, glm::vec3{ 1.0f });
-		model = glm::scale(model, glm::vec3(100.9f));
-		model = glm::rotate(model, -55.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(20.0f));
+		//model = glm::rotate(model, -55.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
 		testCube->Render(GL_TRIANGLES,testVao,36);
@@ -272,7 +272,7 @@ int main()
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		//Отрисовка на текущей итерации и вывод на экран
-		glfwSwapBuffers(window->ReturnWindow());
+		glfwSwapBuffers(window->GetWindow());
 	}
 	//Очистка буферов
 	Renderer::DeleteVao(1, &vao);

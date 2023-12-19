@@ -9,10 +9,10 @@ Window::Window(int majorVersion,
 				int w,
 				int h,
 				const char* nameOfWindow) :
-				_window(nullptr),
-				_majorVersion(majorVersion),
-				_minorVersion(minorVersion),
-				_nameOfWindow(nameOfWindow)
+					_window(nullptr),
+					_majorVersion(majorVersion),
+					_minorVersion(minorVersion),
+					_nameOfWindow(nameOfWindow)
 {
 	width = w;
 	height = h;
@@ -23,11 +23,10 @@ void Window::InitializationGLFW()
 {
 	//Инициализация GLFW
 	glfwInit();
-	//Настройка GLFW
-	//Задается минимальная требуемая версия OpenGL. 
-	//Мажорная 
+	
+	//Мажорная версия
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, _majorVersion);
-	//Минорная
+	//Минорная версия
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, _minorVersion);
 	//Установка профайла для которого создается контекст
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -36,10 +35,11 @@ void Window::InitializationGLFW()
 }
 
 //Создание окна
-int Window::CreatWindow()
+int Window::CreatWindow() noexcept
 {
 	//Создание объекта окна
 	_window = glfwCreateWindow(width, height, _nameOfWindow, nullptr, nullptr);
+
 	if (_window == nullptr)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -59,15 +59,9 @@ int Window::CreatWindow()
 		return -1;
 	}
 
-	/*Прежде чем мы начнем что - либо отрисовывать нам надо еще кое что сделать. Нам нужно сообщить OpenGL размер отрисовываемого окна,
-	чтобы OpenGL знал, как мы хотим отображать данные и координаты относительно окна.
-	Мы можем установить эти значения через функцию glViewport.*/
+	//Буфер размера окна
 	glfwGetFramebufferSize(_window, &width, &height);
 
-	/*Первые 2 аргумента функции glViewport — это позиция нижнего левого угла окна.
-	Третий и четвертый — это ширина и высота отрисовываемого окна в px, которые мы получаем напрямую из GLFW.
-	Вместо того, чтобы руками задавать значения ширины и высоты в 800 и 600 соответственно мы будем использовать значения из GLFW,
-	поскольку такой алгоритм также работает и на экранах с большим DPI(как Apple Retina).*/
 	glViewport(0, 0, width, height);
 
 	//Проверка глубины
@@ -79,6 +73,7 @@ int Window::CreatWindow()
 
 }
 
-GLFWwindow* Window::ReturnWindow() { return _window; }
+GLFWwindow* Window::GetWindow() { return _window; }
 
 Window::~Window() { delete _window; }
+
